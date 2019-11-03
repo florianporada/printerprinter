@@ -1,0 +1,47 @@
+{
+  "name": "printer_boi",
+  "version": "0.0.1",
+  "description": "socket based thermal printer",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d dist --source-maps",
+    "serve": "node dist/index.js",
+    "start": "babel-node src/index.js",
+    "start:dev": "nodemon src/index.js --exec babel-node",
+    "coverage": "jest --coverage --runInBand --verbose",
+    "eslint": "eslint src/**/*.js --ignore-pattern",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "iot",
+    "sockets",
+    "socket.io",
+    "thermal",
+    "printer",
+    "raspberry",
+    "pi",
+    "nodejs"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "author": "florianporada",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-preset-node8": "^1.2.0",
+    "eslint": "^5.12.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.1",
+    "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "moment": "^2.24.0",
+    "socket.io": "^2.3.0",
+    "winston": "^3.2.1"
+  }
+}

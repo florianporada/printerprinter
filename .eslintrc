@@ -1,0 +1,17 @@
+{
+  "plugins": ["node"],
+  "extends": ["eslint:recommended", "plugin:node/recommended"],
+  "rules": {
+    "node/no-unsupported-features/es-syntax": 0,
+    "node/no-unsupported-features/es-builtins": 0,
+    "no-console": 0
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018
+  }
+}
