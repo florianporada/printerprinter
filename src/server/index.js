@@ -2,12 +2,11 @@ import http from 'http';
 import socket from 'socket.io';
 
 import logger from '../lib/logger';
-import { resolve } from 'url';
 
 /**
  *
  *
- * @class Printer
+ * @class PrinterService
  */
 class PrinterService {
   constructor() {
