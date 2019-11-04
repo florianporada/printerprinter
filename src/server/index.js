@@ -9,17 +9,18 @@ import logger from '../lib/logger';
  * @class PrinterService
  */
 class PrinterService {
-  constructor() {
+  constructor(props = {}) {
     this.server = http.createServer(function handler(req, res) {
       res.writeHead(200);
       res.end('got sockets?');
     });
     this.io = socket(this.server);
     this.printers = [];
+    this.port = props.port || 3030;
   }
 
   init() {
-    this.server.listen(process.env.SOCKET_PORT || 3030);
+    this.server.listen(this.port);
 
     this.io.on('connection', socket => {
       socket.on('register_printer', data => {
@@ -56,7 +57,7 @@ class PrinterService {
       this.printers.forEach(printer => {
         if (printer.uid === printerUid) {
           printer.emit('print_message', message, data => {
-            logger.info(`feebdack from printer: ${data}`);
+            logger.info(data);
 
             resolve({
               message: `Sent message to ${printer.uid} (${printer.name})`

@@ -8,8 +8,8 @@
     "serve": "node dist/index.js",
     "start": "babel-node src/index.js",
     "start:dev": "nodemon src/index.js --exec babel-node",
-    "example:server": "nodemon playground/server.js --exec babel-node",
-    "example:client": "nodemon playground/client.js --exec babel-node",
+    "example:server": "nodemon example/server.js --exec babel-node",
+    "example:client": "nodemon example/client.js --exec babel-node",
     "coverage": "jest --coverage --runInBand --verbose",
     "eslint": "eslint src/**/*.js --ignore-pattern",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -43,6 +43,7 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "moment": "^2.24.0",
+    "python-shell": "^1.0.8",
     "socket.io": "^2.3.0",
     "winston": "^3.2.1"
   }
