@@ -45,6 +45,13 @@ class PrinterService {
     });
   }
 
+  /**
+   *
+   *
+   * @param {*} { message, printerUid = 0 }
+   * @returns
+   * @memberof PrinterService
+   */
   print({ message, printerUid = 0 }) {
     return new Promise((resolve, reject) => {
       if (this.printers.length === 0) {
