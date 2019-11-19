@@ -26,3 +26,5 @@ typings/
 .tmp
 .idea
 .vscode
+
+src/client/db.json

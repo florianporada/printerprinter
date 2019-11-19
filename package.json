@@ -12,7 +12,7 @@
     "client:dev": "webpack-dev-server --config webpack.config.js --watch --mode development",
     "client:build": "webpack --config webpack.config.js --mode production",
     "example:server": "nodemon example/server.js --exec babel-node",
-    "example:client": "nodemon example/client.js --exec babel-node",
+    "example:client": "nodemon example/client.js --exec babel-node --ignore src/client/db.json",
     "coverage": "jest --coverage --runInBand --verbose",
     "eslint": "eslint src/**/*.js --ignore-pattern",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -52,8 +52,10 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "lowdb": "^1.0.0",
     "milligram": "^1.3.0",
     "moment": "^2.24.0",
     "python-shell": "^1.0.8",

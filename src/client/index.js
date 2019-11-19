@@ -1,5 +1,9 @@
+import path from 'path';
 import io from 'socket.io-client';
 import express from 'express';
+import bodyParser from 'body-parser';
+import low from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
 
 // import { sendToPrintScript } from './components/bridge';
 import logger from '../lib/logger';
@@ -11,10 +15,26 @@ import logger from '../lib/logger';
  */
 class PrinterClient {
   constructor(props = {}) {
+    this.webserverPort = props.webserverPort || 8080;
     this.url = props.url || 'http://localhost:3030';
     this.name = props.name || 'Printy McPrintface';
     this.uid = props.uid || 0;
-    this.webserverPort = props.webserverPort || 8080;
+    this.baudrate = props.webserverPort || 9600;
+    this.serialport = props.webserverPort || '/dev/ttyS0';
+
+    const adapter = new FileSync(path.join(__dirname, 'db.json'));
+    this.db = low(adapter);
+    this.db
+      .defaults({
+        config: {
+          uid: this.uid,
+          url: this.url,
+          serialport: this.serialport,
+          baudrate: this.baudrate,
+          name: this.name
+        }
+      })
+      .write();
   }
 
   initSocket() {
@@ -51,15 +71,35 @@ class PrinterClient {
 
   initWeb() {
     const app = express();
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
 
     app.use('/', express.static(`${__dirname}/public`));
 
     app.get('/config', (req, res) => {
-      res.send({});
+      const data = this.db.get('config').value();
+
+      res.send(data);
     });
 
     app.put('/config', (req, res) => {
+      this.db.set('config', req.body).write();
+
       res.send({ message: 'saved config to db' });
+    });
+
+    app.delete('/config', (req, res) => {
+      this.db
+        .set('config', {
+          uid: this.uid,
+          url: this.url,
+          serialport: this.serialport,
+          baudrate: this.baudrate,
+          name: this.name
+        })
+        .write();
+
+      res.send({ message: 'reset config in db' });
     });
 
     app.listen(this.webserverPort, () => {
