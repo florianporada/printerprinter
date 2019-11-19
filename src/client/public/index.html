@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Printer configuration</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <h3>Configuration</h3>
+          <p>Configure your printer friend and hit <code>SAVE</code></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <form>
+            <fieldset>
+              <h4>Printer connection</h4>
+              <label for="nameField">Name</label>
+              <input
+                type="text"
+                placeholder="Printy McPrintfaceß"
+                id="nameField"
+              />
+              <label for="connectionUrl">Connection URL</label>
+              <input
+                type="text"
+                placeholder="https://mysocketurl.com:3030/"
+                id="connectionUrl"
+                required
+              />
+              <label for="connectionUrl">Baudrate</label>
+              <input
+                type="number"
+                placeholder="9600"
+                id="connectionUrl"
+                required
+              />
+              <label for="serialPort">Serialport</label>
+              <input
+                type="text"
+                placeholder="/dev/serial0"
+                id="serialPort"
+                required
+              />
+
+              <h4>Wifi connection</h4>
+              <label for="wifiField">SSID</label>
+              <input type="text" placeholder="my wifi name" id="wifiField" />
+              <label for="wifiPw">Password</label>
+              <input type="password" placeholder="superSecure!2" id="wifiPw" />
+
+              <hr />
+
+              <input class="button-primary" type="submit" value="Save" />
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

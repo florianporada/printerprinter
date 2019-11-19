@@ -25,3 +25,4 @@ typings/
 .DS_Store
 .tmp
 .idea
+.vscode
