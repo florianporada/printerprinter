@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import sys
+import argparse
 import json
 import textwrap
 import base64
@@ -11,27 +12,22 @@ from io import BytesIO
 from Adafruit_Thermal import *
 
 
+parser = argparse.ArgumentParser(
+    description='Sends a JSON messge to the printer via stdin (e.g.: { "text": "hello world!", "sender": "internet" })')
+parser.add_argument("--baudrate", default=9600,
+                    help="Baudrate to communicate with the printer")
+parser.add_argument("--serialport", default='/dev/ttyS0',
+                    help="Serialport on which the printer is connected")
+
+args = parser.parse_args()
+
+
 # Read data from stdin
 def read_in():
     lines = sys.stdin.readlines()
     # Since our input would only be having one line, parse our JSON data from that
     return json.loads(lines[0])
 
-
-# def get_serialport():
-#     fn = os.path.abspath('./db.json')
-#     with open(fn) as data_file:
-#         data = json.load(data_file)
-
-#     return data['config'][0]['serialport']
-
-
-# def get_baudrate():
-#     fn = os.path.abspath('./db.json')
-#     with open(fn) as data_file:
-#         data = json.load(data_file)
-
-#     return int(data['config'][0]['baudrate'])
 
 def text_parser(text):
     return text.encode('utf-8', 'replace').strip()
@@ -51,13 +47,13 @@ def print_image(imageString, printer):
         printer.justify('C')
 
 
-def print_content(text, printer):
+def print_text(text, printer):
     if text != '':
         printer.justify('L')
         printer.println(textwrap.fill(text_parser(text)))
 
 
-def print_from(text, printer):
+def print_sender(text, printer):
     if text != '':
         printer.justify('R')
         printer.boldOn()
@@ -72,8 +68,8 @@ def print_divider(printer):
 
 
 def main():
-    serialport = '/dev/ttyS0'
-    baudrate = 9600
+    serialport = args.serialport
+    baudrate = int(args.baudrate)
     timeout = 5
 
     # create printer object
@@ -83,8 +79,8 @@ def main():
     data = read_in()
 
     print_image(data.get('image', ''), p)
-    print_content(data.get('message', ''), p)
-    print_from(data.get('sender', 'anon'), p)
+    print_text(data.get('text', ''), p)
+    print_sender(data.get('sender', ''), p)
     print_divider(p)
 
 
