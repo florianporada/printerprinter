@@ -46,10 +46,16 @@ class PrinterService {
   }
 
   /**
+   * Sends a message to a connected printer
    *
+   * @param {Object} data
+   * @param {string} data.message.text - test which will be sent to the printer
+   * @param {string} data.message.image - base64 encoded image string
+   * @param {string} data.message.sender - the name of the sender
+   * @param {string} data.printerUid - uid for identifying the printer
    *
-   * @param {*} { message, printerUid = 0 }
-   * @returns
+   * @returns {Promise}
+   *
    * @memberof PrinterService
    */
   print({ message, printerUid = 0 }) {
