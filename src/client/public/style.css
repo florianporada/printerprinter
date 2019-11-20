@@ -1,0 +1,15 @@
+.infopanel {
+  background-color: transparent;
+  border: 0.1rem solid #606c76;
+  border-radius: 0.4rem;
+  color: #606c76;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+  line-height: 3.8rem;
+  padding: 0 3rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  opacity: 0;
+  display: inline-block;
+}

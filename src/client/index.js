@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 
-// import { sendToPrintScript } from './components/bridge';
+import { sendToPrintScript } from './components/bridge';
 import logger from '../lib/logger';
 
 /**
@@ -16,29 +16,39 @@ import logger from '../lib/logger';
 class PrinterClient {
   constructor(props = {}) {
     this.webserverPort = props.webserverPort || 8080;
-    this.url = props.url || 'http://localhost:3030';
-    this.name = props.name || 'Printy McPrintface';
-    this.uid = props.uid || 0;
-    this.baudrate = props.webserverPort || 9600;
-    this.serialport = props.webserverPort || '/dev/ttyS0';
+    this.config = {
+      url: props.url || 'http://localhost:3030',
+      name: props.name || 'Printy McPrintface',
+      uid: props.uid || 0,
+      baudrate: props.webserverPort || 9600,
+      serialport: props.serialport || '/dev/ttyS0'
+    };
 
     const adapter = new FileSync(path.join(__dirname, 'db.json'));
     this.db = low(adapter);
-    this.db
-      .defaults({
-        config: {
-          uid: this.uid,
-          url: this.url,
-          serialport: this.serialport,
-          baudrate: this.baudrate,
-          name: this.name
-        }
-      })
-      .write();
+
+    if (
+      this.db.get('config').value() === undefined ||
+      Object.entries(this.db.get('config').value()).length === 0
+    ) {
+      this.db
+        .defaults({
+          config: {
+            uid: this.uid,
+            url: this.url,
+            serialport: this.serialport,
+            baudrate: this.baudrate,
+            name: this.name
+          }
+        })
+        .write();
+
+      this.config = this.db.get('config').value();
+    }
   }
 
   initSocket() {
-    const socket = io.connect(this.url);
+    const socket = io.connect(this.config.url);
     socket.emit('register_printer', {
       type: 'printer',
       name: this.name,
@@ -46,22 +56,21 @@ class PrinterClient {
     });
 
     socket.on('print_message', async (data, cb) => {
-      console.log(data);
-
       try {
         const res = await sendToPrintScript({
-          message: data.message,
+          text: data.text,
+          image: data.image,
           sender: data.sender
         });
 
         cb({
-          from: this.uid,
+          from: this.config.uid,
           code: 0,
           message: res.message
         });
       } catch (error) {
         cb({
-          from: this.uid,
+          from: this.config.uid,
           code: -1,
           message: error.message
         });
@@ -83,19 +92,28 @@ class PrinterClient {
     });
 
     app.put('/config', (req, res) => {
-      this.db.set('config', req.body).write();
+      // check if config is valid
+      if (
+        !['url', 'serialport', 'uid', 'baudrate', 'name'].every(item =>
+          req.body.hasOwnProperty(item)
+        )
+      ) {
+        return res.status(400).send({ message: 'invalid config' });
+      }
 
-      res.send({ message: 'saved config to db' });
+      const data = this.db.set('config', req.body).write();
+
+      res.send(data.config);
     });
 
     app.delete('/config', (req, res) => {
       this.db
         .set('config', {
-          uid: this.uid,
-          url: this.url,
-          serialport: this.serialport,
-          baudrate: this.baudrate,
-          name: this.name
+          uid: this.config.uid,
+          url: this.config.url,
+          serialport: this.config.serialport,
+          baudrate: this.config.baudrate,
+          name: this.config.name
         })
         .write();
 

@@ -9,55 +9,55 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="column">
+        <div class="column column-50">
           <h3>Configuration</h3>
           <p>Configure your printer friend and hit <code>SAVE</code></p>
+        </div>
+        <div class="column column-offset-25 column-25">
+          <p class="infopanel">all good</p>
         </div>
       </div>
       <div class="row">
         <div class="column">
-          <form>
+          <form name="configurationForm">
             <fieldset>
               <h4>Printer connection</h4>
+              <label for="uidField">Uid</label>
+              <input type="text" placeholder="0" id="uidField" required />
               <label for="nameField">Name</label>
               <input
                 type="text"
-                placeholder="Printy McPrintfaceß"
+                placeholder="Printy McPrintface"
                 id="nameField"
+                required
               />
-              <label for="connectionUrl">Connection URL</label>
+              <label for="connectionUrlField">Connection URL</label>
               <input
                 type="text"
                 placeholder="https://mysocketurl.com:3030/"
-                id="connectionUrl"
+                id="connectionUrlField"
                 required
               />
-              <label for="connectionUrl">Baudrate</label>
+              <label for="baudrateField">Baudrate</label>
               <input
                 type="number"
                 placeholder="9600"
-                id="connectionUrl"
+                id="baudrateField"
                 required
               />
-              <label for="serialPort">Serialport</label>
+              <label for="serialPortField">Serialport</label>
               <input
                 type="text"
                 placeholder="/dev/serial0"
-                id="serialPort"
+                id="serialPortField"
                 required
               />
-
-              <h4>Wifi connection</h4>
-              <label for="wifiField">SSID</label>
-              <input type="text" placeholder="my wifi name" id="wifiField" />
-              <label for="wifiPw">Password</label>
-              <input type="password" placeholder="superSecure!2" id="wifiPw" />
-
-              <hr />
 
               <input class="button-primary" type="submit" value="Save" />
             </fieldset>
           </form>
+          <hr />
+          <a id="resetConfig" class="button">Reset</a>
         </div>
       </div>
     </div>
