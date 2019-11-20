@@ -5,5 +5,8 @@ const printerService = new PrinterService();
 printerService.init();
 
 setTimeout(() => {
-  printerService.print({ message: 'heeooo' });
+  printerService
+    .print({ message: { text: 'foo', sender: 'bar' } })
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
 }, 5000);
