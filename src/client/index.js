@@ -51,8 +51,8 @@ class PrinterClient {
     const socket = io.connect(this.config.url);
     socket.emit('register_printer', {
       type: 'printer',
-      name: this.name,
-      uid: this.uid
+      name: this.config.name,
+      uid: this.config.uid
     });
 
     socket.on('print_message', async (data, cb) => {
