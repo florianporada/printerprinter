@@ -7,6 +7,7 @@
     "build": "babel src -d dist --source-maps --ignore src/client/public/index.js && npm run client:build && npm run copy:python",
     "copy:python": "babel src/client/python --out-dir dist/client/python --copy-files",
     "serve": "node dist/index.js",
+    "serve:client": "node dist/client/client.js",
     "start": "babel-node src/index.js",
     "start:dev": "nodemon src/index.js --exec babel-node",
     "client:dev": "webpack-dev-server --config webpack.config.js --watch --mode development",
