@@ -5,11 +5,11 @@ import bodyParser from 'body-parser';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 
-import { sendToPrintScript } from './components/bridge';
+import { initBridge, sendToPrintScript } from './components/bridge';
 import logger from '../lib/logger';
 
 /**
- *
+ * Client designed for running on an raspberry (or similar)
  *
  * @class PrinterClient
  */
@@ -20,8 +20,9 @@ class PrinterClient {
       url: props.url || 'http://localhost:3030',
       name: props.name || 'Printy McPrintface',
       uid: props.uid || 0,
-      baudrate: props.webserverPort || 9600,
-      serialport: props.serialport || '/dev/ttyS0'
+      baudrate: props.baudrate || 9600,
+      serialport: props.serialport || '/dev/ttyS0',
+      ledpin: props.ledpin || 12
     };
 
     const adapter = new FileSync(path.join(__dirname, 'db.json'));
@@ -47,6 +48,11 @@ class PrinterClient {
     }
   }
 
+  /**
+   * Starts the socket services which should connect to the server
+   *
+   * @memberof PrinterClient
+   */
   initSocket() {
     const socket = io.connect(this.config.url);
     socket.emit('register_printer', {
@@ -78,6 +84,11 @@ class PrinterClient {
     });
   }
 
+  /**
+   * Starts the webservice for configuring the printer client via browser
+   *
+   * @memberof PrinterClient
+   */
   initWeb() {
     const app = express();
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -125,7 +136,13 @@ class PrinterClient {
     });
   }
 
+  /**
+   * Init all client services
+   *
+   * @memberof PrinterClient
+   */
   init() {
+    initBridge({ serialport: this.config.serialport, baudrate: this.config.baudrate });
     this.initSocket();
     this.initWeb();
   }

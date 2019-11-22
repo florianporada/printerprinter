@@ -1,28 +1,20 @@
 import path from 'path';
 import { PythonShell } from 'python-shell';
-import fs from 'fs';
 import logger from '../../lib/logger';
 
-const dbPath = path.join(__dirname, '..', 'db.json');
 let pyshell;
 
 /**
  * Script for initializing the python print script
  *
+ * @param {Object} config
+ * @param {string} config.serialport - serial port where the printer is attached to
+ * @param {number} config.baudrate - baudrate for communicating with the serial device
  */
-function initShell() {
+function initBridge(config) {
   try {
-    const { config } = JSON.parse(fs.readFileSync(dbPath));
-
-    if (!config.baudrate && !config.serialport) {
-      logger.info('No valid config found. Try again in 5 seconds');
-      setTimeout(() => {
-        initShell();
-      }, 5000);
-    }
-
     pyshell = new PythonShell(path.normalize(path.join(__dirname, '..', 'python', 'print.py')), {
-      pythonPath: '/usr/bin/python',
+      pythonPath: config.pythonPath || '/usr/bin/python',
       args: [
         '--serialport',
         config.serialport || '/dev/ttyS0',
@@ -31,11 +23,9 @@ function initShell() {
       ]
     });
   } catch (error) {
-    logger.error(`could not init python shell, try again in 5 seconds`);
+    logger.error(`could not init python shell`, error);
   }
 }
-
-initShell();
 
 /**
  * Sends the data to the python script which handles the communication with the printer
@@ -47,6 +37,8 @@ initShell();
  */
 const sendToPrintScript = data => {
   return new Promise((resolve, reject) => {
+    if (!pyshell) reject({ message: 'Pyshell not initialized', code: -1 });
+
     pyshell.send(JSON.stringify(data));
 
     pyshell.end(function(err, code) {
@@ -65,4 +57,4 @@ const sendToPrintScript = data => {
   });
 };
 
-export { sendToPrintScript };
+export { initBridge, sendToPrintScript };
