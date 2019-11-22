@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo 'Get updates'
 sudo apt-get update -y
 
