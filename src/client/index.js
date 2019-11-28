@@ -35,11 +35,12 @@ class PrinterClient {
       this.db
         .defaults({
           config: {
-            uid: this.uid,
-            url: this.url,
-            serialport: this.serialport,
-            baudrate: this.baudrate,
-            name: this.name
+            uid: this.config.uid,
+            url: this.config.url,
+            serialport: this.config.serialport,
+            baudrate: this.config.baudrate,
+            name: this.config.name,
+            ledpin: this.config.ledpin
           }
         })
         .write();
@@ -124,7 +125,8 @@ class PrinterClient {
           url: this.config.url,
           serialport: this.config.serialport,
           baudrate: this.config.baudrate,
-          name: this.config.name
+          name: this.config.name,
+          ledpin: this.config.ledpin
         })
         .write();
 

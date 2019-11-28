@@ -19,6 +19,7 @@ function getConfig() {
     $('#connectionUrlField').val(data.url);
     $('#baudrateField').val(data.baudrate);
     $('#serialPortField').val(data.serialport);
+    $('#ledPinField').val(data.ledpin);
 
     showMessage('Fetched config from db');
   }).fail(function(err) {
@@ -74,7 +75,8 @@ $(function() {
       name: $('#nameField').val(),
       url: $('#connectionUrlField').val(),
       baudrate: $('#baudrateField').val(),
-      serialport: $('#serialPortField').val()
+      serialport: $('#serialPortField').val(),
+      ledpin: $('#ledPinField').val()
     });
   });
 });
