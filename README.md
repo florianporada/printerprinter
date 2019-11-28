@@ -19,7 +19,7 @@ Lorem erat tortor habitant integer ante lacinia
 
 - Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
 
-##### Example
+#### Example
 
 ##### Automatic
 
@@ -44,10 +44,10 @@ PRINTER_LED=12
 ##### Manual
 
 ```javascript
-import PrinterClient from "../src/client/index";
+import PrinterClient from "../src/client/index"; // import path will change
 
 const printer = new PrinterClient({
-  url: "http://socketurl:3030",
+  url: "http://socketurl:3030", // points to the socketserver explained below
   name: "Printy McPrintface",
   uid: 0,
   baudrate: 9600,
@@ -61,6 +61,29 @@ printer.init();
 ### Server
 
 Lorem erat tortor habitant integer ante lacinia
+
+#### Usage
+
+To initialize the service
+
+```javascript
+import PrinterService from "../src/server/index"; // import path will change
+
+const printerService = new PrinterService();
+
+printerService.init({
+  port: 3030 // defines the port for the socket service
+});
+```
+
+To send something to the printer:
+
+```javascript
+printerService
+  .print({ message: { text: "foo", sender: "bar" }, printerUid: 0 })
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
+```
 
 ### Credits
 
