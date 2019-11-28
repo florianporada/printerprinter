@@ -5,7 +5,7 @@ DATE=$(date '+%Y_%m_%d_%H_%M_%S')
 FILENAME=headless_device_ip_$DATE.txt
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  MSG_CONTENT=$(hostname -i | tr '\n' '; ')
+  MSG_CONTENT=$(hostname -I | tr '\n' '; ')
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # MSG_CONTENT=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk -'{print $2}'-)
   MSG_CONTENT=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2 | tr '\n' '; ')
@@ -16,7 +16,6 @@ elif [[ "$OSTYPE" == "msys" ]]; then
   # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
   MSG_CONTENT="no ip fetch script present"
 elif [[ "$OSTYPE" == "win32" ]]; then
-  # I'm not sure this can happen.
   MSG_CONTENT="no ip fetch script present"
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
   # ...
@@ -29,7 +28,7 @@ echo 'posting '$FILENAME' to your github gist'
 
 wget --verbose \
   --method POST \
-  --header 'MSG_CONTENT-Type: application/json' \
+  --header "Content-Type: application/json" \
   --header "Authorization: token ${GITHUB_ACCESS_TOKEN}" \
   --header 'User-Agent: PostmanRuntime/7.19.0' \
   --header 'Accept: */*' \

@@ -23,9 +23,13 @@ Lorem erat tortor habitant integer ante lacinia
 
 ##### Automatic
 
+You can either use a .env file to configure the printer or use a lowdb file for get/set the configuration.
+Set PRINTER_CONFIG_MODE to 'db' or 'env' to switch between the two modes.
+
 - define .env vars
 
-```
+```dotenv
+PRINTER_CONFIG_MODE='<db|env>'
 PRINTER_SOCKET_URL='http://socketurl:3030/'
 PRINTER_WEBSERVER_PORT=8080
 PRINTER_NAME='Printy McPrintface'
@@ -39,20 +43,19 @@ PRINTER_LED=12
 
 ##### Manual
 
-```
-import PrinterClient from '../src/client/index';
+```javascript
+import PrinterClient from "../src/client/index";
 
 const printer = new PrinterClient({
-  url: 'http://socketurl:3030',
-  name: 'Printy McPrintface',
+  url: "http://socketurl:3030",
+  name: "Printy McPrintface",
   uid: 0,
   baudrate: 9600,
-  serialport: '/dev/ttyS0',
+  serialport: "/dev/ttyS0",
   ledpin: 12
 });
 
 printer.init();
-
 ```
 
 ### Server
