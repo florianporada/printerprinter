@@ -69,11 +69,11 @@ To initialize the service
 ```javascript
 import PrinterService from "../src/server/index"; // import path will change
 
-const printerService = new PrinterService();
-
-printerService.init({
+const printerService = new PrinterService({
   port: 3030 // defines the port for the socket service
 });
+
+printerService.init();
 ```
 
 To send something to the printer:
