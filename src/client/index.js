@@ -6,6 +6,7 @@ import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 
 import { initBridge, sendToPrintScript } from './components/bridge';
+import { initGpio } from './components/gpio';
 import logger from '../lib/logger';
 
 /**
@@ -22,7 +23,7 @@ class PrinterClient {
       uid: props.uid || 0,
       baudrate: props.baudrate || 9600,
       serialport: props.serialport || '/dev/ttyS0',
-      ledpin: props.ledpin || 12
+      ledpin: props.ledpin
     };
 
     const adapter = new FileSync(path.join(__dirname, 'db.json'));
@@ -47,6 +48,9 @@ class PrinterClient {
 
       this.config = this.db.get('config').value();
     }
+    if (this.config.ledPin) {
+      initGpio({ ledPin: this.config.ledPin });
+    }
   }
 
   /**
@@ -56,10 +60,15 @@ class PrinterClient {
    */
   initSocket() {
     const socket = io.connect(this.config.url);
-    socket.emit('register_printer', {
-      type: 'printer',
-      name: this.config.name,
-      uid: this.config.uid
+
+    socket.on('connect', () => {
+      logger.info(`Connected to ${this.config.url}`);
+
+      socket.emit('register_printer', {
+        type: 'printer',
+        name: this.config.name,
+        uid: this.config.uid
+      });
     });
 
     socket.on('print_message', async (data, cb) => {
@@ -139,7 +148,7 @@ class PrinterClient {
   }
 
   /**
-   * Init all client services
+   * Initialize all client services
    *
    * @memberof PrinterClient
    */

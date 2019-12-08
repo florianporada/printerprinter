@@ -22,6 +22,8 @@ function initBridge(config) {
         config.baudrate || 9600
       ]
     });
+
+    logger.info('init bridge');
   } catch (error) {
     logger.error(`could not init python shell`, error);
   }
