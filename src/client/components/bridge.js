@@ -3,6 +3,7 @@ import { PythonShell } from 'python-shell';
 import logger from '../../lib/logger';
 
 let pyshell;
+let bridgeConfig;
 
 /**
  * Script for initializing the python print script
@@ -10,9 +11,11 @@ let pyshell;
  * @param {Object} config
  * @param {string} config.serialport - serial port where the printer is attached to
  * @param {number} config.baudrate - baudrate for communicating with the serial device
+ * @param {number} config.pythonPath - custom path to python binary
  */
 function initBridge(config) {
   try {
+    bridgeConfig = config;
     pyshell = new PythonShell(path.normalize(path.join(__dirname, '..', 'python', 'print.py')), {
       pythonPath: config.pythonPath || '/usr/bin/python',
       args: [
@@ -38,6 +41,8 @@ function initBridge(config) {
  * @param {string} data.sender - the name of the sender
  */
 const sendToPrintScript = data => {
+  initBridge(bridgeConfig);
+
   return new Promise((resolve, reject) => {
     if (!pyshell) reject({ message: 'Pyshell not initialized', code: -1 });
 
