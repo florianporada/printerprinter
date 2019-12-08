@@ -6,7 +6,7 @@ import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 
 import { initBridge, sendToPrintScript } from './components/bridge';
-import { initGpio } from './components/gpio';
+import gpio from './components/gpio';
 import logger from '../lib/logger';
 
 /**
@@ -20,7 +20,7 @@ class PrinterClient {
     this.config = {
       url: props.url || 'http://localhost:3030',
       name: props.name || 'Printy McPrintface',
-      uid: props.uid || 0,
+      uid: props.uid || '0',
       baudrate: props.baudrate || 9600,
       serialport: props.serialport || '/dev/ttyS0',
       ledpin: props.ledpin
@@ -29,10 +29,7 @@ class PrinterClient {
     const adapter = new FileSync(path.join(__dirname, 'db.json'));
     this.db = low(adapter);
 
-    if (
-      this.db.get('config').value() === undefined ||
-      Object.entries(this.db.get('config').value()).length === 0
-    ) {
+    if (this.db.get('config').value() === undefined) {
       this.db
         .defaults({
           config: {
@@ -45,12 +42,9 @@ class PrinterClient {
           }
         })
         .write();
+    }
 
-      this.config = this.db.get('config').value();
-    }
-    if (this.config.ledPin) {
-      initGpio({ ledPin: this.config.ledPin });
-    }
+    this.config = this.db.get('config').value();
   }
 
   /**
@@ -63,6 +57,7 @@ class PrinterClient {
 
     socket.on('connect', () => {
       logger.info(`Connected to ${this.config.url}`);
+      gpio.on();
 
       socket.emit('register_printer', {
         type: 'printer',
@@ -71,8 +66,15 @@ class PrinterClient {
       });
     });
 
+    socket.on('disconnect', () => {
+      logger.info(`Disconnected from ${this.config.url}`);
+      gpio.blink(1000);
+    });
+
     socket.on('print_message', async (data, cb) => {
       try {
+        gpio.blink(250);
+
         const res = await sendToPrintScript({
           text: data.text,
           image: data.image,
@@ -91,6 +93,8 @@ class PrinterClient {
           message: error.message
         });
       }
+
+      gpio.on();
     });
   }
 
@@ -153,6 +157,10 @@ class PrinterClient {
    * @memberof PrinterClient
    */
   init() {
+    if (this.config.ledpin) {
+      gpio.init({ ledPin: this.config.ledpin });
+      gpio.blink(1000);
+    }
     initBridge({ serialport: this.config.serialport, baudrate: this.config.baudrate });
     this.initSocket();
     this.initWeb();

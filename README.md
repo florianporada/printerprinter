@@ -34,6 +34,16 @@ network={
 
 - Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
 
+- Install `pm2` to automatically start the client `sudo npm install -g pm2`
+
+- For starting the printer client on startup run the following commands:
+
+```shell
+pm2 start ./src/client/ecosystem.config.yaml
+pm2 startup
+pm2 save
+```
+
 #### Example
 
 ##### Automatic

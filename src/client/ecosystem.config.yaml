@@ -1,0 +1,6 @@
+apps:
+  - script: ./dist/client/client.js
+    name: "printer_client"
+    autorestart: true
+    restart_delay: 5000
+    instances: 1
