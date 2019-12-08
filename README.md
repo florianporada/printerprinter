@@ -15,6 +15,21 @@ Lorem erat tortor habitant integer ante lacinia
 - Follow the instruction in the link below to set up your raspberry pi\
   **[Install RaspberryPi](https://styxit.com/2017/03/14/headless-raspberry-setup.html)**
 
+- Add `wpa_supplicant.conf` in your newly flashed SD-Card
+
+```config
+country=DE
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+    ssid="your_real_wifi_ssid"
+    scan_ssid=1
+    psk="your_real_password"
+    key_mgmt=WPA-PSK
+}
+```
+
 - Run `sh scripts/install_client.sh`
 
 - Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
