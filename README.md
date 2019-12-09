@@ -38,7 +38,7 @@ network={
 
 - For starting the printer client on startup run the following commands:
 
-```shell
+```console
 pm2 start ./src/client/ecosystem.config.yaml
 pm2 startup
 pm2 save
@@ -53,7 +53,7 @@ Set PRINTER_CONFIG_MODE to 'db' or 'env' to switch between the two modes.
 
 - define .env vars
 
-```dotenv
+```console
 PRINTER_CONFIG_MODE='<db|env>'
 PRINTER_SOCKET_URL='http://socketurl:3030/'
 PRINTER_WEBSERVER_PORT=8080

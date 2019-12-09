@@ -4,3 +4,8 @@ apps:
     autorestart: true
     restart_delay: 5000
     instances: 1
+  # - script: ./dist/scripts/post_ip_gist.sh
+  #   name: "headless_ip"
+  #   autorestart: false
+  #   env:
+  #     GITHUB_ACCESS_TOKEN: <your-access-token>
