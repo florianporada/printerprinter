@@ -105,7 +105,14 @@ To send something to the printer:
 
 ```javascript
 printerService
-  .print({ message: { text: "foo", sender: "bar" }, printerUid: 0 })
+  .print({
+    message: {
+      text: "foo",
+      image: "<base64 encoded image>",
+      sender: "bar"
+    },
+    printerUid: 0
+  })
   .then(res => console.log(res))
   .catch(err => console.log(err));
 ```
