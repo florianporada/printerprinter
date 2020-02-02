@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 
-import { initBridge, sendToPrintScript } from './components/bridge';
+import { setBridgeConfig, sendToPrintScript } from './components/bridge';
 import gpio from './components/gpio';
 import logger from '../lib/logger';
 
@@ -161,7 +161,7 @@ class PrinterClient {
       gpio.init({ ledPin: this.config.ledpin });
       gpio.blink(1000);
     }
-    initBridge({ serialport: this.config.serialport, baudrate: this.config.baudrate });
+    setBridgeConfig({ serialport: this.config.serialport, baudrate: this.config.baudrate });
     this.initSocket();
     this.initWeb();
   }

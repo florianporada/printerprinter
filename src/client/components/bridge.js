@@ -6,6 +6,20 @@ let pyshell;
 let bridgeConfig;
 
 /**
+ * Script for setting the config for the python script
+ *
+ * @param {Object} config
+ * @param {string} config.serialport - serial port where the printer is attached to
+ * @param {number} config.baudrate - baudrate for communicating with the serial device
+ * @param {number} config.pythonPath - custom path to python binary
+ */
+function setBridgeConfig(config) {
+  logger.info('set bridge config');
+
+  bridgeConfig = config;
+}
+
+/**
  * Script for initializing the python print script
  *
  * @param {Object} config
@@ -15,7 +29,6 @@ let bridgeConfig;
  */
 function initBridge(config) {
   try {
-    bridgeConfig = config;
     pyshell = new PythonShell(path.normalize(path.join(__dirname, '..', 'python', 'print.py')), {
       pythonPath: config.pythonPath || '/usr/bin/python',
       args: [
@@ -64,4 +77,4 @@ const sendToPrintScript = data => {
   });
 };
 
-export { initBridge, sendToPrintScript };
+export { setBridgeConfig, sendToPrintScript };
