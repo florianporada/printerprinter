@@ -35,7 +35,15 @@ def text_parser(text):
 
 def print_image(imageString, printer):
     if imageString != '':
+        basewidth = 384
         img = Image.open(BytesIO(base64.b64decode(imageString)))
+        width, height = img.size
+
+        if width < basewidth:
+          wpercent = (basewidth/float(img.size[0]))
+          hsize = int((float(img.size[1])*float(wpercent)))
+          img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+
         printer.justify('C')
         printer.printImage(img, True)
         printer.justify('C')
