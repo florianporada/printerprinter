@@ -36,14 +36,8 @@ def text_parser(text):
 def print_image(imageString, printer):
     if imageString != '':
         img = Image.open(BytesIO(base64.b64decode(imageString)))
-        basewidth = 384
-        wpercent = (basewidth/float(img.size[0]))
-        hsize = int((float(img.size[1])*float(wpercent)))
-        img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-        img = img.convert('1')
-        w, h = img.size
         printer.justify('C')
-        printer.printBitmap(img.getdata(), w, h, True)
+        printer.printImage(img, True)
         printer.justify('C')
 
 
@@ -64,7 +58,7 @@ def print_sender(text, printer):
 def print_divider(printer):
     printer.justify('L')
     printer.println('________________________________')
-    printer.feed(3)
+    printer.feed(2)
 
 
 def main():
