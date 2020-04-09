@@ -1,7 +1,7 @@
 {
-  "name": "printer_boi",
+  "name": "printerprinter",
   "version": "0.1.2",
-  "description": "socket based thermal printer",
+  "description": "socket based thermal printer components",
   "main": "index.js",
   "scripts": {
     "prepare": "npm run build",
