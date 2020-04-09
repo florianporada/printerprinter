@@ -1,8 +1,8 @@
-# Printer Boi
+# PrinterPrinter
 
 ## Description
 
-Printer boi is a standalone/companion project for connecting a raspberrypi zero attached thermal printer via socket.io to an exisiting nodejs environment
+PrinterPrinter is a standalone/companion project for connecting a raspberrypi zero attached thermal printer via socket.io to an exisiting nodejs environment
 
 ## Installation
 
@@ -77,7 +77,7 @@ const printer = new PrinterClient({
   uid: 0,
   baudrate: 9600,
   serialport: "/dev/ttyS0",
-  ledpin: 12
+  ledpin: 12,
 });
 
 printer.init();
@@ -95,7 +95,7 @@ To initialize the service
 import PrinterService from "../src/server/index"; // import path will change
 
 const printerService = new PrinterService({
-  port: 3030 // defines the port for the socket service
+  port: 3030, // defines the port for the socket service
 });
 
 printerService.init();
@@ -109,12 +109,12 @@ printerService
     message: {
       text: "foo",
       image: "<base64 encoded image>",
-      sender: "bar"
+      sender: "bar",
     },
-    printerUid: 0
+    printerUid: 0,
   })
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
 ```
 
 ### Credits
