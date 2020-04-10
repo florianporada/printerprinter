@@ -7,13 +7,14 @@ import json
 import textwrap
 import base64
 import os
+import datetime
 from PIL import Image
 from io import BytesIO
 from Adafruit_Thermal import *
 
 
 parser = argparse.ArgumentParser(
-    description='Sends a JSON messge to the printer via stdin (e.g.: { "text": "hello world!", "sender": "internet" })')
+    description='Sends a JSON messge to the printer via stdin (CTRL + D) (e.g.: { "text": "Elementum enim sagittis ultricies in tempus sociosqu", "sender": "internet" })')
 parser.add_argument("--baudrate", default=9600,
                     help="Baudrate to communicate with the printer")
 parser.add_argument("--serialport", default='/dev/ttyS0',
@@ -39,10 +40,12 @@ def print_image(imageString, printer):
         img = Image.open(BytesIO(base64.b64decode(imageString)))
         width, height = img.size
 
-        if width < basewidth:
-          wpercent = (basewidth/float(img.size[0]))
-          hsize = int((float(img.size[1])*float(wpercent)))
-          img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+        # resize image and make background white if transparent
+        wpercent = (basewidth/float(width))
+        hsize = int((float(height)*float(wpercent)))
+        imgResized = img.resize((basewidth, hsize), Image.ANTIALIAS)
+        background = Image.new('RGB', (basewidth, hsize), (255, 255, 255))
+        background.paste(imgResized, (0, 0), imgResized.convert('RGBA'))
 
         printer.justify('C')
         printer.printImage(img, True)
@@ -52,14 +55,18 @@ def print_image(imageString, printer):
 def print_text(text, printer):
     if text != '':
         printer.justify('L')
-        printer.println(textwrap.fill(text_parser(text)))
+        printer.println(textwrap.fill(text_parser(text), 32))
 
 
 def print_sender(text, printer):
     if text != '':
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d, %I:%M%p")
+
+        printer.feed(1)
         printer.justify('R')
         printer.boldOn()
-        printer.println(text_parser('>> ' + text))
+        printer.println(text_parser('from: ' + text))
+        printer.println(text_parser('at: ' + timestamp))
         printer.boldOff()
 
 
