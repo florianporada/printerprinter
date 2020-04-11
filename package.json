@@ -1,6 +1,6 @@
 {
   "name": "printerprinter",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "socket based thermal printer components",
   "main": "index.js",
   "scripts": {
