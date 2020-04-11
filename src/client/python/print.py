@@ -40,15 +40,31 @@ def print_image(imageString, printer):
         img = Image.open(BytesIO(base64.b64decode(imageString)))
         width, height = img.size
 
+        # make minimum width 100px
+        if width < 100:
+            wsize = 100
+            wpercent = (wsize/float(width))
+            hsize = int((float(height)*float(wpercent)))
+            position = (int(basewidth/2) - int(wsize/2), 0)
+        # define position of image if smaller than basewith
+        elif width < basewidth:
+            wsize = width
+            hsize = height
+            position = (int(basewidth/2) - int(wsize/2), 0)
+        # scale down image if bigger than basewith
+        else:
+            wpercent = (basewidth/float(width))
+            hsize = int((float(height)*float(wpercent)))
+            wsize = basewidth
+            position = (0, 0)
+
         # resize image and make background white if transparent
-        wpercent = (basewidth/float(width))
-        hsize = int((float(height)*float(wpercent)))
-        imgResized = img.resize((basewidth, hsize), Image.ANTIALIAS)
+        img = img.resize((wsize, hsize), Image.ANTIALIAS)
         background = Image.new('RGB', (basewidth, hsize), (255, 255, 255))
-        background.paste(imgResized, (0, 0), imgResized.convert('RGBA'))
+        background.paste(img, position, img.convert('RGBA'))
 
         printer.justify('C')
-        printer.printImage(img, True)
+        printer.printImage(background, True)
         printer.justify('C')
 
 
