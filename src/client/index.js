@@ -4,6 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
+import { exec } from 'child_process';
 
 import { setBridgeConfig, sendToPrintScript } from './components/bridge';
 import gpio from './components/gpio';
@@ -23,7 +24,7 @@ class PrinterClient {
       uid: props.uid || '0',
       baudrate: props.baudrate || 9600,
       serialport: props.serialport || '/dev/ttyS0',
-      ledpin: props.ledpin
+      ledpin: props.ledpin,
     };
 
     const adapter = new FileSync(path.join(__dirname, 'db.json'));
@@ -38,8 +39,8 @@ class PrinterClient {
             serialport: this.config.serialport,
             baudrate: this.config.baudrate,
             name: this.config.name,
-            ledpin: this.config.ledpin
-          }
+            ledpin: this.config.ledpin,
+          },
         })
         .write();
     }
@@ -62,7 +63,7 @@ class PrinterClient {
       socket.emit('register_printer', {
         type: 'printer',
         name: this.config.name,
-        uid: this.config.uid
+        uid: this.config.uid,
       });
     });
 
@@ -78,19 +79,19 @@ class PrinterClient {
         const res = await sendToPrintScript({
           text: data.text,
           image: data.image,
-          sender: data.sender
+          sender: data.sender,
         });
 
         cb({
           from: this.config.uid,
           code: 0,
-          message: res.message
+          message: res.message,
         });
       } catch (error) {
         cb({
           from: this.config.uid,
           code: -1,
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -110,6 +111,20 @@ class PrinterClient {
 
     app.use('/', express.static(`${__dirname}/public`));
 
+    app.get('/restart', (req, res) => {
+      const command = `/opt/nodejs/bin/pm2 restart all --update-env`;
+
+      exec(command, (error, stdout, stderr) => {
+        if (error)
+          return res.status(400).send({ message: 'could not execute command', err: error });
+
+        if (stderr)
+          return res.status(400).send({ message: 'error while executeing command', err: stderr });
+
+        res.send({ message: 'restarting printerprinter client' });
+      });
+    });
+
     app.get('/config', (req, res) => {
       const data = this.db.get('config').value();
 
@@ -119,7 +134,7 @@ class PrinterClient {
     app.put('/config', (req, res) => {
       // check if config is valid
       if (
-        !['url', 'serialport', 'uid', 'baudrate', 'name'].every(item =>
+        !['url', 'serialport', 'uid', 'baudrate', 'name'].every((item) =>
           req.body.hasOwnProperty(item)
         )
       ) {
@@ -139,7 +154,7 @@ class PrinterClient {
           serialport: this.config.serialport,
           baudrate: this.config.baudrate,
           name: this.config.name,
-          ledpin: this.config.ledpin
+          ledpin: this.config.ledpin,
         })
         .write();
 

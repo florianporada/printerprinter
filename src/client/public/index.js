@@ -13,7 +13,7 @@ function showMessage(message) {
 }
 
 function getConfig() {
-  $.getJSON('/config', data => {
+  $.getJSON('/config', (data) => {
     $('#uidField').val(data.uid);
     $('#nameField').val(data.name);
     $('#connectionUrlField').val(data.url);
@@ -22,7 +22,7 @@ function getConfig() {
     $('#ledPinField').val(data.ledpin);
 
     showMessage('Fetched config from db');
-  }).fail(function(err) {
+  }).fail(function (err) {
     console.log(err);
 
     showMessage('Could not fetch config');
@@ -36,10 +36,10 @@ function saveConfig(config) {
     data: JSON.stringify(config),
     dataType: 'json',
     contentType: 'application/json',
-    success: function() {
+    success: function () {
       showMessage('Saved config to db');
-    }
-  }).fail(function(err) {
+    },
+  }).fail(function (err) {
     console.log(err);
 
     showMessage('Could not save config');
@@ -50,24 +50,44 @@ function resetConfig() {
   $.ajax({
     url: '/config',
     type: 'DELETE',
-    success: function() {
+    success: function () {
       showMessage('Reset config in db');
-    }
-  }).fail(function(err) {
+    },
+  }).fail(function (err) {
     console.log(err);
 
     showMessage('Could not reset config');
   });
 }
 
-$(function() {
+function restartClient() {
+  $.ajax({
+    url: '/restart',
+    type: 'GET',
+    success: function () {
+      showMessage('Restarted client');
+    },
+  }).fail(function (err) {
+    console.log(err);
+
+    showMessage('Could not restart client');
+  });
+
+  showMessage('Restarting client now');
+}
+
+$(function () {
   getConfig();
 
   $('#resetConfig').click(() => {
     resetConfig();
   });
 
-  $('form').submit(function(event) {
+  $('#restartClient').click(() => {
+    restartClient();
+  });
+
+  $('form').submit(function (event) {
     event.preventDefault();
 
     saveConfig({
@@ -76,7 +96,7 @@ $(function() {
       url: $('#connectionUrlField').val(),
       baudrate: $('#baudrateField').val(),
       serialport: $('#serialPortField').val(),
-      ledpin: $('#ledPinField').val()
+      ledpin: $('#ledPinField').val(),
     });
   });
 });
