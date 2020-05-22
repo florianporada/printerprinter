@@ -42,9 +42,9 @@ wget -O - https://raw.githubusercontent.com/florianporada/printerprinter/master/
 - For starting the printer client on startup run the following commands:
 
 ```sh
-pm2 start ./src/client/ecosystem.config.yaml
-pm2 startup
-pm2 save
+sudo pm2 start ./src/client/ecosystem.config.yaml
+sudo pm2 startup
+sudo pm2 save
 ```
 
 #### Example
