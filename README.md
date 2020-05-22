@@ -43,10 +43,8 @@ wget -O - https://raw.githubusercontent.com/florianporada/printerprinter/master/
 
 ##### Automatic
 
-You can either use a .env file to configure the printer or use a lowdb file for get/set the configuration.
-Set PRINTER_CONFIG_MODE to 'db' or 'env' to switch between the two modes.
-
-- define .env vars
+You can either use a `.env` file to configure the printer or use a lowdb file for get/set the configuration.
+Set PRINTER_CONFIG_MODE to **db** or **env** to switch between the two modes.
 
 ```sh
 PRINTER_CONFIG_MODE='<db|env>'
@@ -58,8 +56,6 @@ PRINTER_BAUDRATE=9600
 PRINTER_SERIALPORT='/dev/ttyS0'
 PRINTER_LED=12
 ```
-
-- start client via `npm start serve:client`
 
 ##### Manual
 
