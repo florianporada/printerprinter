@@ -6,11 +6,11 @@ PrinterPrinter is a standalone/companion project for connecting a raspberrypi ze
 
 ## Installation
 
-Lorem erat tortor habitant integer ante lacinia
+**NOTE**: The package is not yet on npm. The installation for the **server** component is therefore still a bit time consuming.
 
 ### Client
 
-#### Install
+#### Install (client)
 
 - Follow the instruction in the link below to set up your raspberry pi\
   **[Install RaspberryPi](https://styxit.com/2017/03/14/headless-raspberry-setup.html)**
@@ -30,11 +30,13 @@ network={
 }
 ```
 
-- Run `sh scripts/install_client.sh`
+- Run to install client
 
-- Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
+```sh
+wget -O - https://raw.githubusercontent.com/florianporada/printerprinter/master/scripts/install_client.sh | bash
+```
 
-- Install `pm2` to automatically start the client `sudo npm install -g pm2`
+- (Optional) Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
 
 - For starting the printer client on startup run the following commands:
 
@@ -69,7 +71,7 @@ PRINTER_LED=12
 ##### Manual
 
 ```javascript
-import PrinterClient from "../src/client/index"; // import path will change
+import PrinterClient from "printerprinter/dist/client/index"; // import path will change
 
 const printer = new PrinterClient({
   url: "http://socketurl:3030", // points to the socketserver explained below
@@ -85,14 +87,37 @@ printer.init();
 
 ### Server
 
-Lorem erat tortor habitant integer ante lacinia
+#### Install (server)
+
+- Add `printerprinter` to `package.json`
+
+```json
+"dependencies": {
+  ...
+  "printerprinter": "github:florianporada/printerprinter#master",
+  ...
+}
+```
+
+- Install dependencies
+
+```sh
+npm run install
+```
+
+- If the `prepare` script is not executed run:
+
+```sh
+cd node_modules/printerprinter
+npm install && npm run build
+```
 
 #### Usage
 
 To initialize the service
 
 ```javascript
-import PrinterService from "../src/server/index"; // import path will change
+import PrinterService from "printerprinter/dist/server/index"; // import path will change
 
 const printerService = new PrinterService({
   port: 3030, // defines the port for the socket service
