@@ -76,6 +76,20 @@ function restartClient() {
   showMessage('Restarting client now');
 }
 
+function testClient() {
+  $.ajax({
+    url: '/test',
+    type: 'GET',
+    success: function () {
+      showMessage('Printing unit works!');
+    },
+  }).fail(function (err) {
+    console.log(err);
+
+    showMessage('Could not test printing unit');
+  });
+}
+
 $(function () {
   getConfig();
 
@@ -85,6 +99,10 @@ $(function () {
 
   $('#restartClient').click(() => {
     restartClient();
+  });
+
+  $('#testClient').click(() => {
+    testClient();
   });
 
   $('form').submit(function (event) {

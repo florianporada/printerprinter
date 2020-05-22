@@ -125,6 +125,20 @@ class PrinterClient {
       });
     });
 
+    app.get('/test', async (req, res) => {
+      try {
+        await sendToPrintScript({
+          text: 'Hey! I am alive! :)',
+          image: '',
+          sender: 'myself',
+        });
+
+        res.send({ message: 'Printing unit works!' });
+      } catch (error) {
+        res.status(400).send({ message: 'Could not test printing unit', err: error });
+      }
+    });
+
     app.get('/config', (req, res) => {
       const data = this.db.get('config').value();
 
