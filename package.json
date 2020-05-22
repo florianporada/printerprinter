@@ -2,7 +2,7 @@
   "name": "printerprinter",
   "version": "0.3.2",
   "description": "socket based thermal printer components",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prepare": "npm run build",
     "build": "babel src -d dist --source-maps --ignore src/client/public/index.js && npm run client:build && npm run copy:python",
