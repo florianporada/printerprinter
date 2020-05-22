@@ -39,14 +39,6 @@ wget -O - https://raw.githubusercontent.com/florianporada/printerprinter/master/
 
 - (Optional) Add `$GITHUB_ACCESS_TOKEN=<gist-enabled-access-token> scripts/post_ip_gist.sh` to run during boot to get the ip of the printer (headless)
 
-- For starting the printer client on startup run the following commands:
-
-```sh
-sudo pm2 start ./src/client/ecosystem.config.yaml
-sudo pm2 startup
-sudo pm2 save
-```
-
 #### Example
 
 ##### Automatic
