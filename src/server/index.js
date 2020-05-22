@@ -10,7 +10,7 @@ import logger from '../lib/logger';
  */
 class PrinterService {
   constructor(props = {}) {
-    this.server = http.createServer(function handler(req, res) {
+    this.server = http.createServer((req, res) => {
       res.writeHead(200);
       res.end('got sockets?');
     });
@@ -22,8 +22,8 @@ class PrinterService {
   init() {
     this.server.listen(this.port);
 
-    this.io.on('connection', socket => {
-      socket.on('register_printer', data => {
+    this.io.on('connection', (socket) => {
+      socket.on('register_printer', (data) => {
         if (data.type === 'printer') {
           socket.name = data.name;
           socket.type = data.printer;
@@ -63,22 +63,22 @@ class PrinterService {
       if (this.printers.length === 0) {
         logger.info('No printer connected');
         reject({
-          message: 'No printer connected'
+          message: 'No printer connected',
         });
       }
 
-      this.printers.forEach(printer => {
+      this.printers.forEach((printer) => {
         if (printer.uid === printerUid) {
-          printer.emit('print_message', message, data => {
+          printer.emit('print_message', message, (data) => {
             logger.info(data);
 
             resolve({
-              message: `Sent message to ${printer.uid} (${printer.name})`
+              message: `Sent message to ${printer.uid} (${printer.name})`,
             });
           });
         } else {
           reject({
-            message: 'Did not find printer uid'
+            message: 'Did not find printer uid',
           });
         }
       });

@@ -35,8 +35,8 @@ function initBridge(config) {
         '--serialport',
         config.serialport || '/dev/ttyS0',
         '--baudrate',
-        config.baudrate || 9600
-      ]
+        config.baudrate || 9600,
+      ],
     });
 
     logger.info('init bridge');
@@ -53,7 +53,7 @@ function initBridge(config) {
  * @param {string} data.image - base64 encoded image string
  * @param {string} data.sender - the name of the sender
  */
-const sendToPrintScript = data => {
+const sendToPrintScript = (data) => {
   initBridge(bridgeConfig);
 
   return new Promise((resolve, reject) => {
@@ -61,17 +61,17 @@ const sendToPrintScript = data => {
 
     pyshell.send(JSON.stringify(data));
 
-    pyshell.end(function(err, code) {
+    pyshell.end(function (err, code) {
       if (err)
         reject({
           message: 'Error while executing the python script',
           code,
-          err
+          err,
         });
 
       resolve({
         message: 'Python script executed successfully',
-        code
+        code,
       });
     });
   });

@@ -17,7 +17,7 @@ if (process.env.PRINTER_CONFIG_MODE === 'env') {
     uid: process.env.PRINTER_UID,
     baudrate: process.env.PRINTER_BAUDRATE,
     serialport: process.env.PRINTER_SERIALPORT,
-    ledpin: process.env.PRINTER_LED
+    ledpin: process.env.PRINTER_LED,
   });
 } else {
   logger.info('using config from db');
