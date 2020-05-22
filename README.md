@@ -15,7 +15,8 @@ PrinterPrinter is a standalone/companion project for connecting a raspberrypi ze
 - Follow the instruction in the link below to set up your raspberry pi\
   **[Install RaspberryPi](https://styxit.com/2017/03/14/headless-raspberry-setup.html)**
 
-- Add `wpa_supplicant.conf` in your newly flashed SD-Card
+- Add file: `ssh` to your newly flashed SD-Card
+- Add file: `wpa_supplicant.conf` to your newly flashed SD-Card
 
 ```config
 country=DE
