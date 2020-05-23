@@ -11,7 +11,7 @@ import gpio from './components/gpio';
 import logger from '../lib/logger';
 
 /**
- * Client designed for running on an raspberry (or similar)
+ * Client designed for running on a raspberry pi (or similar)
  *
  * @class PrinterClient
  */

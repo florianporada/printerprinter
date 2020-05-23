@@ -4,7 +4,7 @@ import socket from 'socket.io';
 import logger from '../lib/logger';
 
 /**
- *
+ * PrinterService Class
  *
  * @class PrinterService
  */
