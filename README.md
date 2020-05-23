@@ -1,16 +1,16 @@
-# PrinterPrinter
+# 🖨 PrinterPrinter
 
 ![printerprinter](https://repository-images.githubusercontent.com/219359224/39577000-9c80-11ea-94f6-5e725a4249c4 "printerprinter")
 
-## Description
+## 📄 Description
 
 PrinterPrinter is a standalone/companion project for connecting a raspberrypi zero attached thermal printer via socket.io to an exisiting nodejs environment
 
-## Installation
+## 🛠 Installation
 
 ### Client
 
-### Build
+#### Build
 
 - Instructions for building the physical client coming soon ...
 
@@ -136,10 +136,15 @@ printerService
   .catch((err) => console.log(err));
 ```
 
-### Troubleshooting / Additional Notes
+## 🐜 Troubleshooting / Additional Notes
 
 - ...
 
-### Credits
+## 📑 ToDos
+
+- Job query on client side
+- API on server side
+
+## 👋 Credits
 
 - [Adafruit - Python Thermal Printer](https://github.com/adafruit/Python-Thermal-Printer)
